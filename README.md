@@ -1,4 +1,4 @@
-# docker-redis
+# docker-postgresql
 
 A Dockerfile that produces a container that will run [Postgresql][postgresql].
 
