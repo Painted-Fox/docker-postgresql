@@ -18,5 +18,5 @@ This example uses `/tmp/postgresql` to store the Postgresql data, but you can mo
 
 ```
 $ mkdir -p /tmp/postgresql
-$ sudo docker run -p 5432 -v /tmp/postgresql:/data postgresql
+$ sudo docker run -d -p 5432 -v /tmp/postgresql:/data paintedfox/postgresql
 ```
