@@ -40,12 +40,16 @@ environment variables.  This lets you discover the username and password of the
 superuser from within a linked container or from the output of `docker inspect
 postgresql`.
 
+If you set DB=database_name, when the container runs it will create a new
+database with the USER having full ownership of it.
+
 ``` shell
 $ mkdir -p /tmp/postgresql
 $ docker run -d -name="postgresql" \
              -p 127.0.0.1:5432:5432 \
              -v /tmp/postgresql:/data \
              -e USER="super" \
+             -e DB="database_name" \
              -e PASS="$(pwgen -s -1 16)" \
              paintedfox/postgresql
 ```
