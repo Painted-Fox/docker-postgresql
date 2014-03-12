@@ -6,6 +6,7 @@ pre_start_action() {
   echo "POSTGRES_USER=$USER"
   echo "POSTGRES_PASS=$PASS"
   echo "POSTGRES_DATA_DIR=$DATA_DIR"
+  if [ $(env | grep DB) ]; then echo "POSTGRES_DATABASE=$DB";fi
 
   # test if DATA_DIR has content
   if [[ ! "$(ls -A $DATA_DIR)" ]]; then
@@ -30,6 +31,15 @@ post_start_action() {
     ALTER ROLE $USER WITH SUPERUSER;
     ALTER ROLE $USER WITH LOGIN;
 EOF"
+
+  # create database if requested
+  if [ $(env | grep DB) ]; then
+    echo "Creating database: $DB"
+    su postgres -c "psql -q <<-EOF
+    CREATE DATABASE $DB WITH OWNER=$USER;
+    GRANT ALL ON DATABASE $DB TO $USER
+EOF"
+  fi
 
   rm /firstrun
 }
