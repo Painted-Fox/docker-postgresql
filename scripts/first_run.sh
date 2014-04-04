@@ -25,12 +25,16 @@ pre_start_action() {
 post_start_action() {
   echo "Creating the superuser: $USER"
 
-  su postgres -c "psql -q <<-EOF
+  until su postgres -c "psql -q <<-EOF
     DROP ROLE IF EXISTS $USER;
     CREATE ROLE $USER WITH ENCRYPTED PASSWORD '$PASS';
     ALTER ROLE $USER WITH SUPERUSER;
     ALTER ROLE $USER WITH LOGIN;
-EOF"
+EOF"; do
+    echo 'Unable to create the superuser.'
+    echo 'Retrying in 3 seconds...'
+    sleep 3
+  done
 
   # create database if requested
   if [ $(env | grep DB) ]; then
