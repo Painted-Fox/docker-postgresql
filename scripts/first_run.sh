@@ -40,7 +40,7 @@ EOF"; do
   if [ $(env | grep DB) ]; then
     echo "Creating database: $DB"
     su postgres -c "psql -q <<-EOF
-    CREATE DATABASE $DB WITH OWNER=$USER;
+    CREATE DATABASE $DB WITH OWNER=$USER ENCODING='UTF8';
     GRANT ALL ON DATABASE $DB TO $USER
 EOF"
   fi
