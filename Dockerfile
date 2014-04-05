@@ -10,20 +10,19 @@ RUN apt-get update
 RUN locale-gen en_US.UTF-8
 ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
-ENV DEBIAN_FRONTEND     noninteractive
 
 # Get the Postgresql keys
-RUN apt-get install -y wget
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y wget
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
 # Install the latest postgresql
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     apt-get update && \
-    apt-get install -y --force-yes postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 && \
     /etc/init.d/postgresql stop
 
 # Install other tools.
-RUN apt-get install -y pwgen inotify-tools
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 
 # Decouple our data from our container.
 VOLUME ["/data"]
