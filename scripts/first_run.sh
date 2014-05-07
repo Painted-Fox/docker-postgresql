@@ -39,10 +39,12 @@ EOF"; do
   # create database if requested
   if [ $(env | grep DB) ]; then
     echo "Creating database: $DB"
-    su postgres -c "psql -q <<-EOF
-    CREATE DATABASE $DB WITH OWNER=$USER ENCODING='UTF8';
-    GRANT ALL ON DATABASE $DB TO $USER
+    for db in ${DB//,/ }; do
+      su postgres -c "psql -q <<-EOF
+      CREATE DATABASE $db WITH OWNER=$USER ENCODING='UTF8';
+      GRANT ALL ON DATABASE $db TO $USER
 EOF"
+    done
   fi
 
   rm /firstrun
