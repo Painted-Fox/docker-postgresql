@@ -118,11 +118,11 @@ a separate container.
 To demonstrate this, we can spin up a new container like so:
 
 ``` shell
-$ docker run -t -i -link postgresql:db ubuntu bash
+$ docker run -t -i --link postgresql:db ubuntu bash
 ```
 
 This assumes you're already running the database container with the name
-*postgresql*.  The `-link postgresql:db` will give the linked container the
+*postgresql*.  The `--link postgresql:db` will give the linked container the
 alias *db* inside of the new container.
 
 From the new container you can connect to the database by running the following
