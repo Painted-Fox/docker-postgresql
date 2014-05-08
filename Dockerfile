@@ -27,10 +27,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 # Decouple our data from our container.
 VOLUME ["/data"]
 
-RUN echo "Dropping current cluster" &&
+RUN echo "Dropping current cluster" && \
     pg_dropcluster --stop 9.3 main
 
-RUN echo "Creating new cluster with UTF8 encoding" &&
+RUN echo "Creating new cluster with UTF8 encoding" && \
     pg_createcluster --locale=en_US.UTF8 --start 9.3 main
 
 # Cofigure the database to use our data dir.
