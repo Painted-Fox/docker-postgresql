@@ -25,7 +25,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 
 # Decouple our data from our container.
-VOLUME ["/data"]
+VOLUME ["/data", "/var/log/postgresql"]
 
 RUN echo "Dropping current cluster" && \
     pg_dropcluster --stop 9.3 main
