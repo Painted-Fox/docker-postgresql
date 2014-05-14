@@ -11,6 +11,9 @@ RUN locale-gen en_US.UTF-8
 ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
 
+# Disable SSH (Not using it at the moment).
+RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+
 # Get the Postgresql keys
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y wget
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -23,6 +26,9 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc
 
 # Install other tools.
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
+
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Decouple our data from our container.
 VOLUME ["/data", "/var/log/postgresql"]
@@ -44,4 +50,9 @@ ADD scripts /scripts
 RUN chmod +x /scripts/start.sh
 RUN touch /firstrun
 
-ENTRYPOINT ["/scripts/start.sh"]
+# Add daemon to be run by runit.
+RUN mkdir /etc/service/postgresql
+RUN ln -s /scripts/start.sh /etc/service/postgresql/run
+
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
