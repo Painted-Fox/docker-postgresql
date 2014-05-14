@@ -14,10 +14,6 @@ ENV LC_ALL     en_US.UTF-8
 # Disable SSH (Not using it at the moment).
 RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
-# Get the Postgresql keys
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y wget
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-
 # Install the latest postgresql
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     apt-get update && \
