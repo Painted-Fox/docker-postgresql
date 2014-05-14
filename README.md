@@ -45,7 +45,7 @@ database with the USER having full ownership of it.
 
 ``` shell
 $ mkdir -p /tmp/postgresql
-$ docker run -d -name="postgresql" \
+$ docker run -d --name="postgresql" \
              -p 127.0.0.1:5432:5432 \
              -v /tmp/postgresql:/data \
              -e USER="super" \
