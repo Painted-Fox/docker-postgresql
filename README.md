@@ -131,8 +131,8 @@ commands:
 ``` shell
 $ apt-get install -y postgresql-client
 $ psql -U "$DB_ENV_USER" \
-       -h "$DB_PORT_3306_TCP_ADDR" \
-       -p "$DB_PORT_3306_TCP_PORT"
+       -h "$DB_PORT_5432_TCP_ADDR" \
+       -p "$DB_PORT_5432_TCP_PORT"
 ```
 
 If you ran the *postgresql* container with the flags `-e USER=<user>` and `-e
