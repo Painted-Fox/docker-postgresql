@@ -29,7 +29,8 @@ $ make DOCKER_USER=paintedfox
 
 The PostgreSQL server is configured to store data in `/data` inside the
 container.  You can map the container's `/data` volume to a volume on the host
-so the data becomes independant of the running container.
+so the data becomes independant of the running container. There is also an 
+additional volume at `/var/log/postgresql` which exposes PostgreSQL's logs.
 
 This example uses `/tmp/postgresql` to store the PostgreSQL data, but you can
 modify this to your needs.
