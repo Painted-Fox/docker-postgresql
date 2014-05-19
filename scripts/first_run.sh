@@ -12,8 +12,13 @@ pre_start_action() {
   if [[ ! "$(ls -A $DATA_DIR)" ]]; then
       echo "Initializing PostgreSQL at $DATA_DIR"
 
-      # Copy the data that we generated within the container to the empty DATA_DIR.
-      cp -R /var/lib/postgresql/9.3/main/* $DATA_DIR
+
+      # Ensure the cluser is dropped.
+      # Seems like postgresql needs a reminder.
+      pg_dropcluster 9.3 main > /dev/null
+
+      # Initialize a new cluster into the empty DATA_DIR.
+      pg_createcluster -d "$DATA_DIR" --locale=en_US.UTF8 --start 9.3 main
   fi
 
   # Ensure postgres owns the DATA_DIR
@@ -25,25 +30,21 @@ pre_start_action() {
 post_start_action() {
   echo "Creating the superuser: $USER"
 
-  until su postgres -c "psql -q <<-EOF
+  setuser postgres psql -q <<-EOF
     DROP ROLE IF EXISTS $USER;
     CREATE ROLE $USER WITH ENCRYPTED PASSWORD '$PASS';
     ALTER ROLE $USER WITH SUPERUSER;
     ALTER ROLE $USER WITH LOGIN;
-EOF"; do
-    echo 'Unable to create the superuser.'
-    echo 'Retrying in 3 seconds...'
-    sleep 3
-  done
+EOF
 
   # create database if requested
   if [ $(env | grep DB) ]; then
     echo "Creating database: $DB"
     for db in ${DB//,/ }; do
-      su postgres -c "psql -q <<-EOF
+      setuser postgres psql -q <<-EOF
       CREATE DATABASE $db WITH OWNER=$USER ENCODING='UTF8';
       GRANT ALL ON DATABASE $db TO $USER
-EOF"
+EOF
     done
   fi
 
