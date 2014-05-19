@@ -18,7 +18,7 @@ pre_start_action() {
       pg_dropcluster 9.3 main > /dev/null
 
       # Initialize a new cluster into the empty DATA_DIR.
-      pg_createcluster -d "$DATA_DIR" --locale=en_US.UTF8 --start 9.3 main
+      pg_createcluster -d "$DATA_DIR" --locale=en_US.UTF8 9.3 main
   fi
 
   # Ensure postgres owns the DATA_DIR
