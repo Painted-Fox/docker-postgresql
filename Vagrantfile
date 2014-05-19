@@ -12,4 +12,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           args: "--name=postgresql -v /vagrant/path/to/your/folder:/var/lib/postgresql -p 5432:5432 ",
           daemonize: true
   end
+
+  config.vm.network "forwarded_port", guest: 5432, host: 5432
 end
