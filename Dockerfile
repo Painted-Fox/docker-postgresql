@@ -22,7 +22,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Decouple our data from our container.
-VOLUME ["/data", "/var/log/postgresql"]
+VOLUME ["/data", "/var/log/postgresql", "/etc/postgresql"]
 
 RUN echo "Dropping current cluster" && \
     pg_dropcluster --stop 9.3 main
