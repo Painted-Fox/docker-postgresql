@@ -21,9 +21,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Decouple our data from our container.
-VOLUME ["/data", "/var/log/postgresql", "/etc/postgresql"]
-
 # Drop the cluster.  We have to do this twice or postgres will think it still
 # exists for some reason.
 RUN echo "Dropping current cluster" && \
@@ -43,6 +40,9 @@ RUN touch /firstrun
 # Add daemon to be run by runit.
 RUN mkdir /etc/service/postgresql
 RUN ln -s /scripts/start.sh /etc/service/postgresql/run
+
+# Expose our data, log, and configuration directories.
+VOLUME ["/data", "/var/log/postgresql", "/etc/postgresql"]
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
