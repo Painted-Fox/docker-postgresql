@@ -21,10 +21,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Drop the cluster.  We have to do this twice or postgres will think it still
-# exists for some reason.
-RUN echo "Dropping current cluster" && \
-    pg_dropcluster --stop 9.3 main
+# Recreate the cluster with UTF-8 encoding.
+RUN echo "Dropping current cluster." && \
+    pg_dropcluster --stop 9.3 main && \
+    echo "Creating cluster with UTF-8 encoding." && \
+    pg_createcluster --locale en_US.UTF-8 9.3 main
 
 # Cofigure the database to use our data dir.
 RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data'/" /etc/postgresql/9.3/main/postgresql.conf

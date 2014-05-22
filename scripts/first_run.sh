@@ -12,13 +12,8 @@ pre_start_action() {
   if [[ ! "$(ls -A $DATA_DIR)" ]]; then
       echo "Initializing PostgreSQL at $DATA_DIR"
 
-
-      # Ensure the cluser is dropped.
-      # Seems like postgresql needs a reminder.
-      pg_dropcluster 9.3 main > /dev/null
-
-      # Initialize a new cluster into the empty DATA_DIR.
-      pg_createcluster -d "$DATA_DIR" --locale=en_US.UTF8 9.3 main
+      # Copy the data that we generated within the container to the empty DATA_DIR.
+      cp -R /var/lib/postgresql/9.3/main/* $DATA_DIR
   fi
 
   # Ensure postgres owns the DATA_DIR
