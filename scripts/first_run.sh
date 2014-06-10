@@ -34,7 +34,7 @@ EOF
 
   # create database if requested
   if [ ! -z $DB ]; then
-    for db in ${DB//,/ }; do
+    for db in $DB; do
       echo "Creating database: $db"
       setuser postgres psql -q <<-EOF
       CREATE DATABASE $db WITH OWNER=$USER ENCODING='UTF8';
@@ -43,14 +43,15 @@ EOF
     done
   fi
 
-  if [ ! -z $EXTENSIONS ]; then
+  if [ ! -z $EXTENSIONS && ! -z $DB ]; then
     for extension in $EXTENSIONS; do
-      echo "Installing extension: $extension"
-      echo "CREATE EXTENSION "$extension";"
-      # enable the extension for the user's database
-      setuser postgres psql accounts_service <<-EOF
-      CREATE EXTENSION "$extension";
+      for db in $DB; do
+        echo "Installing extension for $db: $extension"
+        # enable the extension for the user's database
+        setuser postgres psql $db <<-EOF
+        CREATE EXTENSION "$extension";
 EOF
+      done
     done
   fi
 
