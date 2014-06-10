@@ -24,7 +24,6 @@ pre_start_action() {
 
 post_start_action() {
   echo "Creating the superuser: $USER"
-
   setuser postgres psql -q <<-EOF
     DROP ROLE IF EXISTS $USER;
     CREATE ROLE $USER WITH ENCRYPTED PASSWORD '$PASS';
@@ -41,6 +40,15 @@ EOF
       CREATE DATABASE $db WITH OWNER=$USER ENCODING='UTF8';
       GRANT ALL ON DATABASE $db TO $USER
 EOF
+    done
+  fi
+
+  if [ ! -z $EXTENSIONS ]; then
+    for extension in $EXTENSIONS; do
+      echo "Installing extension: $extension"
+      su postgres -c "psql -q <<-EOF
+      CREATE EXTENSION \"$extension\";
+EOF"
     done
   fi
 
