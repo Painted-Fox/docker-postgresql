@@ -49,7 +49,7 @@ EOF
       echo "CREATE EXTENSION "$extension";"
       # enable the extension for the user's database
       setuser postgres psql accounts_service <<-EOF
-      CREATE EXTENSION "uuid-ossp";
+      CREATE EXTENSION "$extension";
 EOF
     done
   fi
