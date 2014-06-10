@@ -46,9 +46,11 @@ EOF
   if [ ! -z $EXTENSIONS ]; then
     for extension in $EXTENSIONS; do
       echo "Installing extension: $extension"
-      su postgres -c "psql -q <<-EOF
-      CREATE EXTENSION \"$extension\";
-EOF"
+      echo "CREATE EXTENSION "$extension";"
+      # enable the extension for the user's database
+      setuser postgres psql accounts_service <<-EOF
+      CREATE EXTENSION "uuid-ossp";
+EOF
     done
   fi
 
