@@ -43,7 +43,7 @@ EOF
     done
   fi
 
-  if [ ! -z $EXTENSIONS && ! -z $DB ]; then
+  if [[ ! -z $EXTENSIONS && ! -z $DB ]]; then
     for extension in $EXTENSIONS; do
       for db in $DB; do
         echo "Installing extension for $db: $extension"
