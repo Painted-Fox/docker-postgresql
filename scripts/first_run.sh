@@ -33,9 +33,9 @@ post_start_action() {
 EOF
 
   # create database if requested
-  if [ $(env | grep DB) ]; then
-    echo "Creating database: $DB"
+  if [ ! -z $DB ]; then
     for db in ${DB//,/ }; do
+      echo "Creating database: $db"
       setuser postgres psql -q <<-EOF
       CREATE DATABASE $db WITH OWNER=$USER ENCODING='UTF8';
       GRANT ALL ON DATABASE $db TO $USER
@@ -49,7 +49,7 @@ EOF
       echo "CREATE EXTENSION "$extension";"
       # enable the extension for the user's database
       setuser postgres psql accounts_service <<-EOF
-      CREATE EXTENSION "uuid-ossp";
+      CREATE EXTENSION "$extension";
 EOF
     done
   fi
