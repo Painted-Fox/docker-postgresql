@@ -6,7 +6,7 @@ pre_start_action() {
   echo "POSTGRES_USER=$USER"
   echo "POSTGRES_PASS=$PASS"
   echo "POSTGRES_DATA_DIR=$DATA_DIR"
-  if [ $(env | grep DB) ]; then echo "POSTGRES_DATABASE=$DB";fi
+  if [ ! -z $DB ];then echo "POSTGRES_DB=$DB";fi
 
   # test if DATA_DIR has content
   if [[ ! "$(ls -A $DATA_DIR)" ]]; then
