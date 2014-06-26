@@ -33,7 +33,7 @@ post_start_action() {
 EOF
 
   # create database if requested
-  if [ ! -z $DB ]; then
+  if [ ! -z "$DB" ]; then
     for db in $DB; do
       echo "Creating database: $db"
       setuser postgres psql -q <<-EOF
@@ -43,7 +43,7 @@ EOF
     done
   fi
 
-  if [[ ! -z $EXTENSIONS && ! -z $DB ]]; then
+  if [[ ! -z "$EXTENSIONS" && ! -z "$DB" ]]; then
     for extension in $EXTENSIONS; do
       for db in $DB; do
         echo "Installing extension for $db: $extension"
