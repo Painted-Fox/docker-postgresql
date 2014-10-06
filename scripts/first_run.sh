@@ -55,5 +55,7 @@ EOF
     done
   fi
 
+  echo "Initialization complete."
+
   rm /firstrun
 }
