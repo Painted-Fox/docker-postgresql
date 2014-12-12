@@ -27,4 +27,4 @@ wait_for_postgres_and_run_post_start_action &
 
 # Start PostgreSQL
 echo "Starting PostgreSQL..."
-setuser postgres /usr/lib/postgresql/9.3/bin/postgres -D /etc/postgresql/9.3/main
+exec setuser postgres /usr/lib/postgresql/9.3/bin/postgres -D /etc/postgresql/9.3/main
