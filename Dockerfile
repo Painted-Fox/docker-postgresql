@@ -1,6 +1,6 @@
 # Postgresql (http://www.postgresql.org/)
 
-FROM phusion/baseimage:0.9.13
+FROM phusion/baseimage:0.9.15
 MAINTAINER Ryan Seto <ryanseto@yak.net>
 
 # Ensure we create the cluster with UTF-8 locale
