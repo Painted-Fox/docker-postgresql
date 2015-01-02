@@ -15,7 +15,7 @@ fi
 wait_for_postgres_and_run_post_start_action() {
   # Wait for postgres to finish starting up first.
   while [[ ! -e /run/postgresql/9.3-main.pid ]] ; do
-      inotifywait -q -e create /run/postgresql/ >> /dev/null
+      sleep 1
   done
 
   post_start_action
