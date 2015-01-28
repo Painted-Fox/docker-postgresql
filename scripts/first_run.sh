@@ -1,4 +1,4 @@
-USER=${USER:-super}
+USER=${DB_USER:-super}
 PASS=${PASS:-$(pwgen -s -1 16)}
 
 pre_start_action() {
@@ -13,7 +13,7 @@ pre_start_action() {
       echo "Initializing PostgreSQL at $DATA_DIR"
 
       # Copy the data that we generated within the container to the empty DATA_DIR.
-      cp -R /var/lib/postgresql/9.3/main/* $DATA_DIR
+      cp -aR /var/lib/postgresql/9.3/main/* $DATA_DIR
   fi
 
   # Ensure postgres owns the DATA_DIR
