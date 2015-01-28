@@ -1,4 +1,4 @@
-USER=${USER:-super}
+USER=${DB_USER:-super}
 PASS=${PASS:-$(pwgen -s -1 16)}
 
 pre_start_action() {

@@ -49,7 +49,7 @@ $ mkdir -p /tmp/postgresql
 $ docker run -d --name="postgresql" \
              -p 127.0.0.1:5432:5432 \
              -v /tmp/postgresql:/data \
-             -e USER="super" \
+             -e DB_USER="super" \
              -e DB="database_name" \
              -e PASS="$(pwgen -s -1 16)" \
              paintedfox/postgresql
@@ -68,7 +68,7 @@ directory, and the superuser username and password on the host like so:
 $ sudo mkdir -p /srv/docker/postgresql
 $ make run PORT=127.0.0.1:5432 \
            DATA_DIR=/srv/docker/postgresql \
-           USER=super \
+           DB_USER=super \
            PASS=$(pwgen -s -1 16)
 ```
 
@@ -88,7 +88,7 @@ password for the superuser.  To view the login in run `docker logs
 
 ``` shell
 $ docker logs postgresql
-POSTGRES_USER=super
+POSTGRES_DB_USER=super
 POSTGRES_PASS=b2rXEpToTRoK8PBx
 POSTGRES_DATA_DIR=/data
 Starting PostgreSQL...
@@ -136,7 +136,7 @@ $ psql -U "$DB_ENV_USER" \
        -p "$DB_PORT_5432_TCP_PORT"
 ```
 
-If you ran the *postgresql* container with the flags `-e USER=<user>` and `-e
+If you ran the *postgresql* container with the flags `-e DB_USER=<user>` and `-e
 PASS=<pass>`, then the linked container should have these variables available
 in its environment.  Since we aliased the database container with the name
 *db*, the environment variables from the database container are copied into the
