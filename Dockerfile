@@ -3,6 +3,8 @@
 FROM phusion/baseimage:0.9.16
 MAINTAINER Ryan Seto <ryanseto@yak.net>
 
+ENV PGVERSION 9.4
+
 # Ensure we create the cluster with UTF-8 locale
 RUN locale-gen en_US.UTF-8 && \
     echo 'LANG="en_US.UTF-8"' > /etc/default/locale
@@ -17,7 +19,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > /etc/
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --force-yes \
-        postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 && \
+        postgresql-$PGVERSION postgresql-client-$PGVERSION postgresql-contrib-$PGVERSION && \
     /etc/init.d/postgresql stop
 
 # work around for AUFS bug
@@ -32,10 +34,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Cofigure the database to use our data dir.
-RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data'/" /etc/postgresql/9.3/main/postgresql.conf
+RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data'/" /etc/postgresql/$PGVERSION/main/postgresql.conf
 # Allow connections from anywhere.
-RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.3/main/postgresql.conf
-RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/$PGVERSION/main/postgresql.conf
+RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/$PGVERSION/main/pg_hba.conf
 
 EXPOSE 5432
 ADD scripts /scripts
@@ -47,8 +49,8 @@ RUN mkdir /etc/service/postgresql
 RUN ln -s /scripts/start.sh /etc/service/postgresql/run
 
 # Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.3-main.pg_stat_tmp/global.tmp": No such file or directory
-RUN mkdir -p /var/run/postgresql/9.3-main.pg_stat_tmp
-RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
+RUN mkdir -p /var/run/postgresql/${PGVERSION}-main.pg_stat_tmp
+RUN chown postgres.postgres /var/run/postgresql/${PGVERSION}-main.pg_stat_tmp -R
 
 # Expose our data, log, and configuration directories.
 VOLUME ["/data", "/var/log/postgresql", "/etc/postgresql"]
