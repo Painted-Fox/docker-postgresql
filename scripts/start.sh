@@ -5,6 +5,7 @@
 set -e
 
 DATA_DIR=/data
+PGVERSION=9.4
 
 if [[ -e /firstrun ]]; then
   source /scripts/first_run.sh
@@ -14,7 +15,7 @@ fi
 
 wait_for_postgres_and_run_post_start_action() {
   # Wait for postgres to finish starting up first.
-  while [[ ! -e /run/postgresql/9.3-main.pid ]] ; do
+  while [[ ! -e /run/postgresql/${PGVERSION}-main.pid ]] ; do
       inotifywait -q -e create /run/postgresql/ >> /dev/null
   done
 
@@ -27,4 +28,4 @@ wait_for_postgres_and_run_post_start_action &
 
 # Start PostgreSQL
 echo "Starting PostgreSQL..."
-setuser postgres /usr/lib/postgresql/9.3/bin/postgres -D /etc/postgresql/9.3/main
+setuser postgres /usr/lib/postgresql/${PGVERSION}/bin/postgres -D /etc/postgresql/${PGVERSION}/main
